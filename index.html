@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#8b5cf6">
+<title>BharatSchedule</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg1:#eef2ff;--bg2:#faf5ff;--bg3:#fdf2f8;--text:#1f2937;--card:rgba(255,255,255,.62);--border:rgba(255,255,255,.7);--input:rgba(255,255,255,.55);--muted:.65}
+body.dark{--bg1:#111827;--bg2:#3b0764;--bg3:#1f2937;--text:#f9fafb;--card:rgba(255,255,255,.08);--border:rgba(255,255,255,.16);--input:rgba(0,0,0,.28)}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text);min-height:100vh;background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));background-attachment:fixed;transition:background .5s,color .3s}
+button{font:inherit;cursor:pointer;color:inherit;border:none;background:none}
+input,select{font:inherit;color:inherit}
+.hidden{display:none!important}
+.grad-text{background:linear-gradient(90deg,#9333ea,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+header{position:sticky;top:0;z-index:20;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:rgba(255,255,255,.12);border-bottom:1px solid var(--border);padding:12px 16px}
+.wrap{max-width:900px;margin:0 auto}
+.hrow{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 6px 16px rgba(139,92,246,.4)}
+.brand h1{font-size:22px;line-height:1.1}
+.brand small{font-size:11px;opacity:var(--muted)}
+.pills{display:flex;align-items:center;gap:8px}
+.pill{background:var(--card);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:13px;font-weight:700;white-space:nowrap}
+.iconbtn{width:36px;height:36px;border-radius:50%;font-size:18px;transition:.2s}
+.iconbtn:hover{background:var(--card)}
+main{max-width:900px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 10px 30px rgba(0,0,0,.08);transition:transform .25s,box-shadow .25s}
+.card:hover{box-shadow:0 14px 36px rgba(0,0,0,.13)}
+.pad{padding:16px}
+.grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:700px){.grid4{grid-template-columns:repeat(4,1fr)}}
+.stat{text-align:center}
+.stat .big{font-size:24px;font-weight:800}
+.stat .sub{font-size:12px;opacity:var(--muted);margin-top:2px}
+.bar{height:8px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;margin-top:10px}
+.bar>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#8b5cf6,#ec4899);transition:width .5s}
+.timer{overflow:hidden;border-radius:28px}
+.timer .top{height:8px;transition:background .5s}
+.timer .body{padding:24px 16px;text-align:center}
+.ringwrap{position:relative;width:220px;height:220px;margin:0 auto 10px}
+.ringwrap svg{transform:rotate(-90deg)}
+.ringmid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ringmid .ico{font-size:34px}
+.ringmid .time{font-size:46px;font-weight:800;font-variant-numeric:tabular-nums}
+.ringmid .lbl{font-size:13px;opacity:var(--muted)}
+.modes{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{border:1px solid var(--border);background:var(--card);border-radius:99px;padding:7px 14px;font-size:13px;font-weight:600;transition:.25s}
+.chip.on{color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.btn{border-radius:99px;padding:11px 26px;font-weight:700;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.18);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:scale(1.05)}
+.btn.ghost{background:var(--card);color:var(--text);border:1px solid var(--border);box-shadow:none}
+.btn.sm{padding:7px 14px;font-size:13px}
+.btn.green{background:linear-gradient(135deg,#22c55e,#0d9488)}
+.btn.purple{background:linear-gradient(135deg,#8b5cf6,#ec4899)}
+.btn.red{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.settings{margin:10px 0 14px;padding:14px;border-radius:16px;background:var(--input);text-align:left}
+.settings h4{margin-bottom:10px}
+.settings .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:12px}
+.field{width:100%;padding:10px 12px;border-radius:12px;background:var(--input);border:1px solid var(--border);outline:none;transition:border .2s}
+.field:focus{border-color:#a78bfa}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);padding:4px;border-radius:18px;background:var(--card);border:1px solid var(--border);backdrop-filter:blur(16px);gap:4px}
+.tab{padding:10px;border-radius:14px;font-weight:600;font-size:14px;transition:.25s}
+.tab.on{background:#fff;color:#1f2937;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.sechead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px}
+.sechead h3{font-size:22px}
+.list{display:flex;flex-direction:column;gap:12px}
+.item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px}
+.item:hover{transform:scale(1.01)}
+.item.done .txt{text-decoration:line-through;opacity:.55}
+.left{display:flex;align-items:center;gap:12px;min-width:0}
+.cbar{width:5px;height:38px;border-radius:99px;flex:none}
+.txt{font-weight:600;word-break:break-word}
+.meta{font-size:12px;opacity:var(--muted);text-transform:capitalize;margin-top:2px}
+.acts{display:flex;gap:2px;flex:none}
+.acts button{width:34px;height:34px;border-radius:50%;font-size:16px;transition:.2s}
+.acts button:hover{background:rgba(128,128,128,.2)}
+.acts .ok.on{color:#22c55e;background:rgba(34,197,94,.18)}
+.form{display:flex;flex-direction:column;gap:10px;padding:16px;border:2px solid rgba(167,139,250,.6)}
+.empty{text-align:center;padding:32px 16px}
+.empty .e{font-size:40px;margin-bottom:8px}
+.ach{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:700px){.ach{grid-template-columns:repeat(3,1fr)}}
+.a{text-align:center;padding:12px;border-radius:14px;border:1px solid rgba(128,128,128,.25);opacity:.5;transition:.3s}
+.a.on{opacity:1;background:linear-gradient(135deg,rgba(250,204,21,.22),rgba(249,115,22,.2));border-color:rgba(250,204,21,.5)}
+.a .i{font-size:26px}
+.a b{display:block;font-size:13px;margin-top:4px}
+.a small{font-size:11px;opacity:var(--muted)}
+.charts{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:800px){.charts{grid-template-columns:1fr 1fr}}
+.card h4{font-size:16px;margin-bottom:10px}
+.cats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:700px){.cats{grid-template-columns:repeat(4,1fr)}}
+.cat{text-align:center;font-size:13px}
+.cat .c{width:46px;height:46px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 6px 14px rgba(0,0,0,.2)}
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;align-items:center}
+.dots i{width:8px;height:8px;border-radius:50%;background:#f97316}
+.quote{text-align:center;padding:24px;background:linear-gradient(135deg,rgba(147,51,234,.14),rgba(236,72,153,.14));border:2px solid rgba(167,139,250,.35)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,120px);background:#111827;color:#fff;padding:12px 20px;border-radius:14px;font-weight:600;font-size:14px;box-shadow:0 12px 30px rgba(0,0,0,.35);transition:transform .35s;z-index:50;max-width:90vw;text-align:center}
+.toast.show{transform:translate(-50%,0)}
+svg text{fill:currentColor}
+footer{text-align:center;font-size:12px;opacity:.5;padding:8px 0 28px}
+</style>
+</head>
+<body>
+<header><div class="hrow wrap"><div class="brand"><div class="logo">⚡</div><div><h1 class="grad-text">BharatSchedule</h1><small>Boost Your Productivity</small></div></div><div class="pills"><div class="pill" id="hStreak">🔥 0 days</div><div class="pill" id="hLevel">⭐ Lv.1</div><button class="iconbtn" id="themeBtn" title="Toggle theme">🌙</button></div></div></header>
+<main>
+<section class="grid4" id="stats"></section>
+<section class="card timer"><div class="top" id="tTop"></div><div class="body"><div class="row" style="justify-content:flex-end;margin-bottom:-6px"><button class="iconbtn" id="setBtn" title="Timer settings">⚙️</button></div><div class="ringwrap"><svg width="220" height="220" viewBox="0 0 220 220"><defs><linearGradient id="ringG" x1="0" y1="0" x2="1" y2="1"><stop id="rg1" offset="0%" stop-color="#8b5cf6"/><stop id="rg2" offset="100%" stop-color="#ec4899"/></linearGradient></defs><circle cx="110" cy="110" r="90" fill="none" stroke="rgba(128,128,128,.22)" stroke-width="12"/><circle id="ring" cx="110" cy="110" r="90" fill="none" stroke="url(#ringG)" stroke-width="12" stroke-linecap="round" stroke-dasharray="565.49" stroke-dashoffset="565.49" style="transition:stroke-dashoffset .3s linear"/></svg><div class="ringmid"><div class="ico" id="tIco">🧠</div><div class="time" id="tTime">25:00</div><div class="lbl" id="tLbl">Focus Time</div></div></div><div class="settings hidden" id="tSettings"><h4>⚙️ Timer Settings (minutes)</h4><div class="g3" id="tSetGrid"></div></div><div class="modes" id="modes"></div><div class="row"><button class="btn" id="startBtn">▶ Start</button><button class="btn ghost" id="resetBtn">Reset</button></div></div></section>
+<nav class="tabs" id="tabs"><button class="tab on" data-tab="planner">📋 Planner</button><button class="tab" data-tab="analytics">📊 Analytics</button><button class="tab" data-tab="habits">🎯 Habits</button></nav>
+<section id="planner"></section><section id="analytics" class="hidden"></section><section id="habits" class="hidden"></section>
+</main>
+<footer>BharatSchedule · your data is saved on this device</footer><div class="toast" id="toast"></div>
+<script>
+"use strict";
+const CATS={coding:{e:"💻",g:"linear-gradient(135deg,#3b82f6,#9333ea)"},study:{e:"📚",g:"linear-gradient(135deg,#22c55e,#0d9488)"},work:{e:"💼",g:"linear-gradient(135deg,#f97316,#dc2626)"},reading:{e:"📖",g:"linear-gradient(135deg,#6366f1,#9333ea)"},hobby:{e:"🎨",g:"linear-gradient(135deg,#ec4899,#e11d48)"},health:{e:"💪",g:"linear-gradient(135deg,#10b981,#16a34a)"},personal:{e:"🏠",g:"linear-gradient(135deg,#a855f7,#6366f1)"}};
+const MODES={focus:{label:"Focus Time",icon:"🧠",c:["#8b5cf6","#ec4899"]},break:{label:"Short Break",icon:"☕",c:["#22c55e","#3b82f6"]},longbreak:{label:"Long Break",icon:"🌴",c:["#f97316","#ef4444"]}};
+const XP_TASK=25,XP_FOCUS=50,XP_HABIT=15,XP_PER_LEVEL=100,KEY="bharatschedule_v1",CIRC=2*Math.PI*90;
+function freshState(){return{xp:0,streak:0,lastActive:null,dark:false,durations:{focus:25,break:5,longbreak:15},tasks:[{id:1,text:"Complete React Component",done:false,category:"coding"},{id:2,text:"Review Math Formulas",done:false,category:"study"},{id:3,text:"Read 30 pages - Design Book",done:false,category:"reading"}],habits:[{id:1,name:"Morning Exercise",category:"health",streak:0,lastDone:null},{id:2,name:"Read 30 minutes",category:"reading",streak:0,lastDone:null},{id:3,name:"Meditate 10 min",category:"personal",streak:0,lastDone:null}],history:{},focusSessions:0,totalDone:0}}
+let S=load();
+function load(){try{const r=localStorage.getItem(KEY);if(r)return Object.assign(freshState(),JSON.parse(r))}catch(e){}return freshState()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const ui={tab:"planner",showAdd:false,editId:null,newCat:"study",showAddHabit:false,showSettings:false};
+const T={mode:"focus",remaining:25*60,running:false,endAt:0,timer:null};
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),pad=n=>String(n).padStart(2,"0"),dkey=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),today=()=>dkey(new Date()),yesterday=()=>{const d=new Date();d.setDate(d.getDate()-1);return dkey(d)},level=()=>Math.floor(S.xp/XP_PER_LEVEL)+1,hist=k=>(S.history[k]=S.history[k]||{tasks:0,focus:0}),shownStreak=()=>S.lastActive===today()||S.lastActive===yesterday()?S.streak:0;
+function last7(){const out=[],names=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const h=S.history[dkey(d)]||{tasks:0,focus:0};out.push({label:names[d.getDay()],tasks:h.tasks,focus:+(h.focus/60).toFixed(2)})}return out}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2600)}
+function addXP(n){const before=level();S.xp=Math.max(0,S.xp+n);if(level()>before)toast("🎉 Level up! You're now Level "+level())}
+function markActive(){const t=today();if(S.lastActive===t)return;S.streak=S.lastActive===yesterday()?S.streak+1:1;S.lastActive=t}
+function beep(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();[0,.25,.5].forEach(o=>{const os=ctx.createOscillator(),g=ctx.createGain();os.frequency.value=880;os.connect(g);g.connect(ctx.destination);g.gain.setValueAtTime(.15,ctx.currentTime+o);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+o+.2);os.start(ctx.currentTime+o);os.stop(ctx.currentTime+o+.2)})}catch(e){}}
+const fmt=s=>pad(Math.floor(s/60))+":"+pad(s%60);
+function drawTimer(){const m=MODES[T.mode],total=S.durations[T.mode]*60;$("#tTime").textContent=fmt(T.remaining);$("#tIco").textContent=m.icon;$("#tLbl").textContent=m.label+(T.running?" · running":"");$("#ring").style.strokeDashoffset=CIRC*(1-(total-T.remaining)/total);$("#rg1").setAttribute("stop-color",m.c[0]);$("#rg2").setAttribute("stop-color",m.c[1]);const g=`linear-gradient(90deg,${m.c[0]},${m.c[1]})`;$("#tTop").style.background=g;const sb=$("#startBtn");sb.style.background=g;sb.textContent=T.running?"⏸ Pause":"▶ Start";document.title=T.running?fmt(T.remaining)+" · BharatSchedule":"BharatSchedule";document.querySelectorAll("#modes .chip").forEach(c=>{const on=c.dataset.mode===T.mode;c.classList.toggle("on",on);c.style.background=on?`linear-gradient(90deg,${MODES[c.dataset.mode].c[0]},${MODES[c.dataset.mode].c[1]})`:""})}
+function setMode(mode){stopTimer();T.mode=mode;T.remaining=S.durations[mode]*60;drawTimer()}
+function stopTimer(){T.running=false;clearInterval(T.timer)}
+function toggleTimer(){if(T.running){stopTimer();drawTimer();return}if(T.remaining<=0)T.remaining=S.durations[T.mode]*60;T.endAt=Date.now()+T.remaining*1000;T.running=true;T.timer=setInterval(tick,250);drawTimer()}
+function tick(){T.remaining=Math.max(0,Math.round((T.endAt-Date.now())/1000));drawTimer();if(T.remaining===0)finishTimer()}
+function finishTimer(){stopTimer();beep();if(T.mode==="focus"){hist(today()).focus+=S.durations.focus;S.focusSessions++;addXP(XP_FOCUS);markActive();save();toast("🎯 Focus session complete! +"+XP_FOCUS+" XP");renderTop();renderAnalytics()}else toast("⏰ Break over — ready to focus?");T.remaining=0;drawTimer()}
+function renderModes(){$("#modes").innerHTML=Object.entries(MODES).map(([k,m])=>`<button class="chip" data-mode="${k}">${m.icon} ${m.label}</button>`).join("");$("#tSetGrid").innerHTML=Object.entries(MODES).map(([k,m])=>`<div><label>${m.icon} ${m.label}</label><input class="field" type="number" min="1" max="120" data-dur="${k}" value="${S.durations[k]}" style="margin-top:4px"></div>`).join("")}
+function renderTop(){const done=S.tasks.filter(t=>t.done).length,total=S.tasks.length,rate=total?Math.round(done/total*100):0,hDone=S.habits.filter(h=>h.lastDone===today()).length,hTot=S.habits.length,hRate=hTot?Math.round(hDone/hTot*100):0,week=last7().reduce((a,d)=>a+d.focus,0),into=S.xp%XP_PER_LEVEL;$("#hStreak").textContent="🔥 "+shownStreak()+" days";$("#hLevel").textContent="⭐ Lv."+level();$("#stats").innerHTML=`<div class="card pad stat"><div class="big">⭐ Level ${level()}</div><div class="sub">${S.xp} XP total</div><div class="bar"><i style="width:${into}%"></i></div><div class="sub">${XP_PER_LEVEL-into} XP to next level</div></div><div class="card pad stat"><div class="big">🎯 ${rate}%</div><div class="sub">${done}/${total} tasks done</div><div class="bar"><i style="width:${rate}%"></i></div></div><div class="card pad stat"><div class="big">✅ ${hRate}%</div><div class="sub">${hDone}/${hTot} habits today</div><div class="bar"><i style="width:${hRate}%"></i></div></div><div class="card pad stat"><div class="big">⏱ ${week.toFixed(1)}h</div><div class="sub">focus this week</div><div class="bar"><i style="width:${Math.min(100,week/20*100)}%"></i></div></div>`}
+function catOptions(sel){return Object.entries(CATS).map(([k,c])=>`<option value="${k}" ${k===sel?"selected":""}>${c.e} ${k[0].toUpperCase()+k.slice(1)}</option>`).join("")}
+function renderPlanner(){let h=`<div class="sechead"><h3 class="grad-text">📋 Today's Tasks</h3><button class="btn purple sm" data-act="showAdd">＋ Add Task</button></div><div class="list">`;if(ui.showAdd)h+=`<div class="card form"><input class="field" id="newText" placeholder="✨ Enter new task..." maxlength="120"><select class="field" id="newCat">${catOptions(ui.newCat)}</select><div class="row"><button class="btn green sm" data-act="addTask" style="flex:1">💾 Add Task</button><button class="btn ghost sm" data-act="cancelAdd" style="flex:1">✕ Cancel</button></div></div>`;S.tasks.forEach(t=>{if(ui.editId===t.id)h+=`<div class="card form"><input class="field" id="editText" value="${esc(t.text)}" maxlength="120"><select class="field" id="editCat">${catOptions(t.category)}</select><div class="row"><button class="btn green sm" data-act="saveEdit" data-id="${t.id}" style="flex:1">💾 Save</button><button class="btn ghost sm" data-act="cancelEdit" style="flex:1">✕ Cancel</button></div></div>`;else{const c=CATS[t.category]||CATS.personal;h+=`<div class="card item ${t.done?"done":""}"><div class="left"><div class="cbar" style="background:${c.g}"></div><div><div class="txt">${c.e} ${esc(t.text)} ${t.done?"✅":""}</div><div class="meta">${t.category} task</div></div></div><div class="acts"><button class="ok ${t.done?"on":""}" data-act="toggle" data-id="${t.id}" title="Complete">✔</button><button data-act="edit" data-id="${t.id}" title="Edit">✏️</button><button data-act="del" data-id="${t.id}" title="Delete">🗑</button></div></div>`}});if(!S.tasks.length&&!ui.showAdd)h+=`<div class="card empty"><div class="e">🎯</div><h3>No tasks yet!</h3><p style="opacity:.7;margin:6px 0 14px">Add your first task to start earning XP.</p><button class="btn purple sm" data-act="showAdd">＋ Add Your First Task</button></div>`;h+="</div>";$("#planner").innerHTML=h;if(ui.showAdd){const i=$("#newText");if(i)i.focus()}if(ui.editId){const i=$("#editText");if(i)i.focus()}}
+function barChart(data){const W=320,H=190,pl=26,pb=26,pt=18,max=Math.max(1,...data.map(d=>d.tasks)),bw=(W-pl-10)/data.length;let s=`<svg viewBox="0 0 ${W} ${H}" width="100%"><defs><linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs>`;for(let i=0;i<=3;i++){const y=pt+(H-pt-pb)*i/3;s+=`<line x1="${pl}" x2="${W-6}" y1="${y}" y2="${y}" stroke="rgba(128,128,128,.25)"/><text x="${pl-5}" y="${y+4}" font-size="9" text-anchor="end" opacity=".6">${Math.round(max*(1-i/3))}</text>`}data.forEach((d,i)=>{const h=(H-pt-pb)*d.tasks/max,x=pl+i*bw+bw*.18,y=H-pb-h;s+=`<rect x="${x}" y="${y}" width="${bw*.64}" height="${Math.max(h,1)}" rx="5" fill="url(#bg1)"/>`;if(d.tasks)s+=`<text x="${x+bw*.32}" y="${y-4}" font-size="10" text-anchor="middle" font-weight="700">${d.tasks}</text>`;s+=`<text x="${x+bw*.32}" y="${H-8}" font-size="10" text-anchor="middle" opacity=".7">${d.label}</text>`});return s+"</svg>"}
+function lineChart(data){const W=320,H=190,pl=30,pr=12,pb=26,pt=18,max=Math.max(1,...data.map(d=>d.focus)),step=(W-pl-pr)/(data.length-1),pts=data.map((d,i)=>[pl+i*step,H-pb-(H-pt-pb)*d.focus/max]);let s=`<svg viewBox="0 0 ${W} ${H}" width="100%"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient><linearGradient id="lg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6" stop-opacity=".3"/><stop offset="1" stop-color="#3b82f6" stop-opacity="0"/></linearGradient></defs>`;for(let i=0;i<=3;i++){const y=pt+(H-pt-pb)*i/3;s+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" stroke="rgba(128,128,128,.25)"/><text x="${pl-5}" y="${y+4}" font-size="9" text-anchor="end" opacity=".6">${(max*(1-i/3)).toFixed(1)}</text>`}const line=pts.map(p=>p.join(",")).join(" ");s+=`<polygon points="${pl},${H-pb} ${line} ${pts[pts.length-1][0]},${H-pb}" fill="url(#lg2)"/><polyline points="${line}" fill="none" stroke="url(#lg1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;pts.forEach((p,i)=>{s+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#3b82f6"/><text x="${p[0]}" y="${H-8}" font-size="10" text-anchor="middle" opacity=".7">${data[i].label}</text>`});return s+"</svg>"}
+function achievements(){const bestHabit=Math.max(0,...S.habits.map(h=>h.streak));return[{i:"🏆",n:"First Steps",d:"Complete your first task",on:S.totalDone>=1},{i:"🔥",n:"Streak Master",d:"Keep a 7-day streak",on:shownStreak()>=7},{i:"🎯",n:"Focus Champion",d:"Finish 10 focus sessions",on:S.focusSessions>=10},{i:"⭐",n:"Level Up",d:"Reach level 10",on:level()>=10},{i:"💪",n:"Habit Hero",d:"7-day streak on a habit",on:bestHabit>=7},{i:"🚀",n:"Task Crusher",d:"Complete 25 tasks",on:S.totalDone>=25}]}
+function renderAnalytics(){const data=last7(),totalFocus=Object.values(S.history).reduce((a,d)=>a+d.focus,0)/60;let h=`<h3 class="grad-text" style="font-size:22px;margin-bottom:14px">📊 Performance Analytics</h3><div class="list">`;h+=`<div class="card pad"><h4>🏆 Achievements</h4><div class="ach">${achievements().map(a=>`<div class="a ${a.on?"on":""}"><div class="i">${a.i}</div><b>${a.n}</b><small>${a.d}</small>${a.on?'<div style="color:#22c55e;font-size:11px;margin-top:3px">✅ Unlocked</div>':""}</div>`).join("")}</div></div>`;h+=`<div class="charts"><div class="card pad"><h4>📈 Weekly Task Completion</h4>${barChart(data)}</div><div class="card pad"><h4>⏱️ Focus Hours Trend</h4>${lineChart(data)}</div></div>`;h+=`<div class="grid4"><div class="card pad stat"><div class="big">📚 ${S.tasks.length}</div><div class="sub">Total Tasks</div></div><div class="card pad stat"><div class="big">⏰ ${totalFocus.toFixed(1)}h</div><div class="sub">Hours Focused</div></div><div class="card pad stat"><div class="big">🔥 ${shownStreak()}</div><div class="sub">Day Streak</div></div><div class="card pad stat"><div class="big">⭐ ${S.xp}</div><div class="sub">Total XP</div></div></div>`;h+=`<div class="card pad"><h4>🎨 Task Categories</h4><div class="cats">${Object.entries(CATS).map(([k,c])=>{const ts=S.tasks.filter(t=>t.category===k),d=ts.filter(t=>t.done).length,r=ts.length?Math.round(d/ts.length*100):0;return `<div class="cat"><div class="c" style="background:${c.g}">${c.e}</div><b style="text-transform:capitalize">${k}</b><div style="opacity:.65;font-size:12px">${d}/${ts.length} done</div><div class="bar"><i style="width:${r}%"></i></div></div>`}).join("")}</div></div>`;h+=`<div class="row" style="margin-top:6px"><button class="btn red sm" data-act="resetAll">🔄 Reset all progress</button></div></div>`;$("#analytics").innerHTML=h}
+function renderHabits(){const t=today(),done=S.habits.filter(h=>h.lastDone===t).length,tot=S.habits.length,rate=tot?Math.round(done/tot*100):0,best=Math.max(0,...S.habits.map(h=>h.streak)),avg=tot?Math.round(S.habits.reduce((a,h)=>a+h.streak,0)/tot):0;let h=`<div class="sechead"><h3 class="grad-text">🎯 Daily Habits</h3><button class="btn purple sm" data-act="showAddHabit">＋ Add Habit</button></div><div class="list">`;h+=`<div class="card pad"><div class="hrow" style="margin-bottom:6px"><h4 style="margin:0">Today's Progress</h4><b style="font-size:22px;color:#22c55e">${rate}%</b></div><div class="bar" style="height:12px;margin-top:0"><i style="width:${rate}%"></i></div><div class="grid4" style="margin-top:14px;grid-template-columns:repeat(3,1fr)"><div class="stat"><div class="big" style="color:#22c55e">${done}</div><div class="sub">Completed</div></div><div class="stat"><div class="big" style="color:#f97316">${tot-done}</div><div class="sub">Remaining</div></div><div class="stat"><div class="big" style="color:#3b82f6">${best}</div><div class="sub">Best streak</div></div></div></div>`;if(ui.showAddHabit)h+=`<div class="card form"><input class="field" id="newHabit" placeholder="✨ New habit..." maxlength="60"><select class="field" id="newHabitCat">${catOptions("health")}</select><div class="row"><button class="btn green sm" data-act="addHabit" style="flex:1">💾 Add Habit</button><button class="btn ghost sm" data-act="cancelHabit" style="flex:1">✕ Cancel</button></div></div>`;S.habits.forEach(x=>{const c=CATS[x.category]||CATS.personal,on=x.lastDone===t;h+=`<div class="card pad" ${on?'style="border-color:rgba(74,222,128,.6)"':""}><div class="hrow"><div class="left"><div class="cbar" style="background:${c.g}"></div><div><div class="txt" style="${on?"color:#22c55e":""}">${c.e} ${esc(x.name)} ${on?"✅":""}</div><div class="meta">${x.category} habit · <b style="color:#f97316">🔥 ${x.streak} days</b></div></div></div><div class="acts"><button class="ok ${on?"on":""}" data-act="toggleHabit" data-id="${x.id}" title="Done today">✔</button><button data-act="delHabit" data-id="${x.id}" title="Delete">🗑</button></div></div><div class="dots">${Array.from({length:Math.min(x.streak,14)},()=>"<i></i>").join("")}${x.streak>14?`<small style="color:#f97316;font-weight:700;margin-left:6px">+${x.streak-14} more</small>`:""}</div></div>`});if(!tot&&!ui.showAddHabit)h+=`<div class="card empty"><div class="e">🌱</div><h3>No habits yet</h3><p style="opacity:.7">Add a daily habit and build a streak.</p></div>`;h+=`<div class="grid4"><div class="card pad stat"><div class="big">🎯 ${tot}</div><div class="sub">Active habits</div></div><div class="card pad stat"><div class="big">✅ ${done}</div><div class="sub">Done today</div></div><div class="card pad stat"><div class="big">🔥 ${best}</div><div class="sub">Longest streak</div></div><div class="card pad stat"><div class="big">📈 ${avg}</div><div class="sub">Avg streak</div></div></div><div class="card quote"><div style="font-size:38px">🌟</div><h4 class="grad-text" style="font-size:18px;margin:8px 0">"We are what we repeatedly do. Excellence, then, is not an act, but a habit."</h4><small style="opacity:.65">— Aristotle</small></div></div>`;$("#habits").innerHTML=h;if(ui.showAddHabit){const i=$("#newHabit");if(i)i.focus()}}
+function renderAll(){renderTop();renderPlanner();renderAnalytics();renderHabits()}
+function showTab(name){ui.tab=name;["planner","analytics","habits"].forEach(t=>$("#"+t).classList.toggle("hidden",t!==name));document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===name))}
+function toggleTask(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;t.done=!t.done;if(t.done){t.doneOn=today();hist(t.doneOn).tasks++;S.totalDone++;addXP(XP_TASK);markActive();toast("✅ Task complete! +"+XP_TASK+" XP")}else{if(t.doneOn)hist(t.doneOn).tasks=Math.max(0,hist(t.doneOn).tasks-1);S.totalDone=Math.max(0,S.totalDone-1);addXP(-XP_TASK)}save();renderTop();renderPlanner();renderAnalytics()}
+function toggleHabit(id){const h=S.habits.find(x=>x.id===id);if(!h)return;const t=today();if(h.lastDone!==t){h.prevDone=h.lastDone;h.prevStreak=h.streak;h.streak=h.lastDone===yesterday()?h.streak+1:1;h.lastDone=t;addXP(XP_HABIT);markActive();toast("🔥 Habit done! +"+XP_HABIT+" XP")}else{h.lastDone=h.prevDone||null;h.streak=h.prevStreak||0;addXP(-XP_HABIT)}save();renderTop();renderHabits();renderAnalytics()}
+document.addEventListener("click",e=>{const tab=e.target.closest("[data-tab]");if(tab){showTab(tab.dataset.tab);return}const mode=e.target.closest("[data-mode]");if(mode){setMode(mode.dataset.mode);return}const b=e.target.closest("[data-act]");if(!b)return;const id=+b.dataset.id,act=b.dataset.act;switch(act){case"showAdd":ui.showAdd=true;ui.editId=null;renderPlanner();break;case"cancelAdd":ui.showAdd=false;renderPlanner();break;case"addTask":{const txt=$("#newText").value.trim();if(!txt){$("#newText").focus();break}S.tasks.push({id:Date.now(),text:txt,done:false,category:$("#newCat").value});ui.newCat=$("#newCat").value;ui.showAdd=false;save();renderTop();renderPlanner();renderAnalytics();break}case"toggle":toggleTask(id);break;case"edit":ui.editId=id;ui.showAdd=false;renderPlanner();break;case"cancelEdit":ui.editId=null;renderPlanner();break;case"saveEdit":{const txt=$("#editText").value.trim();if(!txt)break;const t=S.tasks.find(x=>x.id===id);t.text=txt;t.category=$("#editCat").value;ui.editId=null;save();renderPlanner();renderAnalytics();break}case"del":{const t=S.tasks.find(x=>x.id===id);if(t&&t.done){if(t.doneOn)hist(t.doneOn).tasks=Math.max(0,hist(t.doneOn).tasks-1);S.totalDone=Math.max(0,S.totalDone-1);addXP(-XP_TASK)}S.tasks=S.tasks.filter(x=>x.id!==id);save();renderTop();renderPlanner();renderAnalytics();break}case"showAddHabit":ui.showAddHabit=true;renderHabits();break;case"cancelHabit":ui.showAddHabit=false;renderHabits();break;case"addHabit":{const n=$("#newHabit").value.trim();if(!n){$("#newHabit").focus();break}S.habits.push({id:Date.now(),name:n,category:$("#newHabitCat").value,streak:0,lastDone:null});ui.showAddHabit=false;save();renderTop();renderHabits();break}case"toggleHabit":toggleHabit(id);break;case"delHabit":S.habits=S.habits.filter(x=>x.id!==id);save();renderTop();renderHabits();break;case"resetAll":if(confirm("Reset ALL progress (level, XP, streaks, stats, tasks and habits)?")){const dark=S.dark;stopTimer();S=freshState();S.dark=dark;save();T.mode="focus";T.remaining=S.durations.focus*60;renderModes();drawTimer();renderAll();toast("Progress reset — Level 1!")}break}});
+document.addEventListener("keydown",e=>{if(e.key!=="Enter")return;const id=e.target.id;if(id==="newText")document.querySelector('[data-act="addTask"]').click();else if(id==="editText")document.querySelector('[data-act="saveEdit"]').click();else if(id==="newHabit")document.querySelector('[data-act="addHabit"]').click()});
+document.addEventListener("change",e=>{const k=e.target.dataset.dur;if(!k)return;const v=Math.min(120,Math.max(1,parseInt(e.target.value)||1));e.target.value=v;S.durations[k]=v;save();if(k===T.mode&&!T.running){T.remaining=v*60;drawTimer()}});
+$("#startBtn").addEventListener("click",toggleTimer);$("#resetBtn").addEventListener("click",()=>{stopTimer();T.remaining=S.durations[T.mode]*60;drawTimer()});$("#setBtn").addEventListener("click",()=>{ui.showSettings=!ui.showSettings;$("#tSettings").classList.toggle("hidden",!ui.showSettings)});$("#themeBtn").addEventListener("click",()=>{S.dark=!S.dark;applyTheme();save()});
+function applyTheme(){document.body.classList.toggle("dark",S.dark);$("#themeBtn").textContent=S.dark?"☀️":"🌙"}
+applyTheme();renderModes();T.remaining=S.durations.focus*60;drawTimer();renderAll();
+</script>
+</body>
+</html>
