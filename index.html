@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#8b5cf6">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" href="./icon-192.png">
+    <link rel="apple-touch-icon" href="./icon-192.png">
 <title>BharatSchedule</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -156,6 +159,14 @@ document.addEventListener("change",e=>{const k=e.target.dataset.dur;if(!k)return
 $("#startBtn").addEventListener("click",toggleTimer);$("#resetBtn").addEventListener("click",()=>{stopTimer();T.remaining=S.durations[T.mode]*60;drawTimer()});$("#setBtn").addEventListener("click",()=>{ui.showSettings=!ui.showSettings;$("#tSettings").classList.toggle("hidden",!ui.showSettings)});$("#themeBtn").addEventListener("click",()=>{S.dark=!S.dark;applyTheme();save()});
 function applyTheme(){document.body.classList.toggle("dark",S.dark);$("#themeBtn").textContent=S.dark?"☀️":"🌙"}
 applyTheme();renderModes();T.remaining=S.durations.focus*60;drawTimer();renderAll();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+  });
+}
 </script>
 </body>
 </html>
